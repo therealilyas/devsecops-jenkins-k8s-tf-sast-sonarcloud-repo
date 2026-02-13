@@ -20,7 +20,7 @@ pipeline {
             -Dsonar.projectKey=therealilyas-buggywebapp \
             -Dsonar.organization=therealilyas-buggywebapp \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.token=$SONAR_TOKEN
+            -Dsonar.token=therealilyas-buggywebapp
           '''
         }
       }
