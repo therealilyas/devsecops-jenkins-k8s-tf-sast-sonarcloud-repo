@@ -32,10 +32,7 @@ pipeline {
         stage('SCA – Snyk') {
             steps {
                 withCredentials([string(credentialsId: 'SNYK_TOKEN', variable: 'SNYK_TOKEN')]) {
-                    sh '''
-                    snyk auth $SNYK_TOKEN
-                    snyk test || true
-                    '''
+                    sh 'SNYK_TOKEN=$SNYK_TOKEN snyk test || true'
                 }
             }
         }
