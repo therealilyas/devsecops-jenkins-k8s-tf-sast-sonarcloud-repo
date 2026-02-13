@@ -7,8 +7,8 @@ pipeline {
 
     environment {
         SONAR_HOST_URL = 'https://sonarcloud.io'
-        SONAR_PROJECT_KEY = 'buggdywebapp'
-        SONAR_ORG = 'buggdywebapp'
+        SONAR_PROJECT_KEY = 'buggywebapp'
+        SONAR_ORG = 'buggywebapp'
         ECR_REGISTRY = '422523651126.dkr.ecr.us-east-1.amazonaws.com'
         IMAGE_NAME = 'asg'
     }
