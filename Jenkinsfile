@@ -11,25 +11,28 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout SCM') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Compile and Run SonarCloud Analysis') {
+        stage('Compile & SonarCloud Analysis') {
             steps {
-                sh '''
-                mvn clean verify sonar:sonar \
-                  -Dsonar.projectKey=therealilyas-buggywebapp \
-                  -Dsonar.organization=therealilyas-buggywebapp \
-                  -Dsonar.host.url=https://sonarcloud.io \
-                  -Dsonar.token=de6c1bd7a374426bbc6248ca6181855a5af829fa
-                '''
+                withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                    sh """
+                    mvn clean verify sonar:sonar \
+                        -Dsonar.projectKey=therealilyas-buggywebapp \
+                        -Dsonar.organization=therealilyas-buggywebapp \
+                        -Dsonar.host.url=https://sonarcloud.io \
+                        -Dsonar.login=${SONAR_TOKEN}
+                    """
+                }
             }
         }
 
-        stage('SCA – Snyk') {
+        stage('SCA – Snyk Scan') {
             steps {
                 withCredentials([string(credentialsId: 'SNYK_TOKEN', variable: 'SNYK_TOKEN')]) {
                     sh 'SNYK_TOKEN=$SNYK_TOKEN snyk test || true'
@@ -53,6 +56,18 @@ pipeline {
                     }
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+        success {
+            echo "Pipeline completed successfully!"
+        }
+        failure {
+            echo "Pipeline failed!"
         }
     }
 }
