@@ -5,46 +5,22 @@ pipeline {
         maven 'Maven_3_8_4'
     }
 
-    environment {
-        IMAGE_NAME = 'asg'
-        ECR_REGISTRY = '422523651126.dkr.ecr.us-east-1.amazonaws.com'
-    }
-
     stages {
 
-        stage('Checkout SCM') {
-            steps {
-                checkout scm
-            }
-        }
+    	
     stage('CompileandRunSonarAnalysis') {
             steps {	
 		sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=therealilyas-key -Dsonar.organization=therealilyas -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=34b1ea3a755672c01dc8615258cf0935eebe318f'
 			}
     }
 
-
-        // stage('Compile & SonarCloud Analysis') {
-        //     steps {
-        //         withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-        //             sh """
-        //             mvn clean verify sonar:sonar \
-        //                 -Dsonar.projectKey=therealilyas-key \
-        //                 -Dsonar.organization=therealilyas \
-        //                 -Dsonar.host.url=https://sonarcloud.io \
-        //                 -Dsonar.login=${SONAR_TOKEN}
-        //             """
-        //         }
-        //     }
-        // }
-
-        stage('SCA – Snyk Scan') {
-            steps {
-                withCredentials([string(credentialsId: 'SNYK_TOKEN', variable: 'SNYK_TOKEN')]) {
-                    sh 'SNYK_TOKEN=$SNYK_TOKEN snyk test || true'
-                }
-            }
-        }
+	stage('RunSCAAnalysisUsingSnyk') {
+	            steps {		
+					withCredentials([string(credentialsId: 'SNYK_TOKEN', variable: 'SNYK_TOKEN')]) {
+						sh 'mvn snyk:test -fn'
+					}
+				}
+	    }		
 
         stage('Docker Build') {
             steps {
@@ -63,17 +39,6 @@ pipeline {
                 }
             }
         }
-    }
-
-    post {
-        always {
-            cleanWs()
-        }
-        success {
-            echo "Pipeline completed successfully!"
-        }
-        failure {
-            echo "Pipeline failed!"
-        }
+		
     }
 }
