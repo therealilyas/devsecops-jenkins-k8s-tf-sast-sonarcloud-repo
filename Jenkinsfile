@@ -17,20 +17,26 @@ pipeline {
                 checkout scm
             }
         }
+    stage('CompileandRunSonarAnalysis') {
+            steps {	
+		sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=therealilyas-key -Dsonar.organization=therealilyas -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=34b1ea3a755672c01dc8615258cf0935eebe318f'
+			}
+    }
 
-        stage('Compile & SonarCloud Analysis') {
-            steps {
-                withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                    sh """
-                    mvn clean verify sonar:sonar \
-                        -Dsonar.projectKey=therealilyas-key \
-                        -Dsonar.organization=therealilyas \
-                        -Dsonar.host.url=https://sonarcloud.io \
-                        -Dsonar.login=${SONAR_TOKEN}
-                    """
-                }
-            }
-        }
+
+        // stage('Compile & SonarCloud Analysis') {
+        //     steps {
+        //         withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+        //             sh """
+        //             mvn clean verify sonar:sonar \
+        //                 -Dsonar.projectKey=therealilyas-key \
+        //                 -Dsonar.organization=therealilyas \
+        //                 -Dsonar.host.url=https://sonarcloud.io \
+        //                 -Dsonar.login=${SONAR_TOKEN}
+        //             """
+        //         }
+        //     }
+        // }
 
         stage('SCA – Snyk Scan') {
             steps {
