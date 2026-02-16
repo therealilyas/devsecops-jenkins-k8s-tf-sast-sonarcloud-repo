@@ -6,36 +6,36 @@ pipeline {
     }
 
     environment {
-        IMAGE_NAME   = 'asg'
+        IMAGE_NAME = 'asg'
         ECR_REGISTRY = '422523651126.dkr.ecr.us-east-1.amazonaws.com'
     }
 
     stages {
 
-        stage('Checkout') {
+        stage('Checkout SCM') {
             steps {
                 checkout scm
             }
         }
 
-        stage('SonarCloud Analysis') {
+        stage('Compile & SonarCloud Analysis') {
             steps {
                 withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                    sh '''
+                    sh """
                     mvn clean verify sonar:sonar \
-                      -Dsonar.projectKey=therealilyas-buggywebapp \
-                      -Dsonar.organization=therealilyas-buggywebapp \
-                      -Dsonar.host.url=https://sonarcloud.io \
-                      -Dsonar.token=$SONAR_TOKEN
-                    '''
+                        -Dsonar.projectKey=therealilyas-buggywebapp \
+                        -Dsonar.organization=therealilyas-buggywebapp \
+                        -Dsonar.host.url=https://sonarcloud.io \
+                        -Dsonar.login=${SONAR_TOKEN}
+                    """
                 }
             }
         }
 
-        stage('SCA – Snyk') {
+        stage('SCA – Snyk Scan') {
             steps {
                 withCredentials([string(credentialsId: 'SNYK_TOKEN', variable: 'SNYK_TOKEN')]) {
-                    sh 'snyk test || true'
+                    sh 'SNYK_TOKEN=$SNYK_TOKEN snyk test || true'
                 }
             }
         }
@@ -56,6 +56,18 @@ pipeline {
                     }
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+        success {
+            echo "Pipeline completed successfully!"
+        }
+        failure {
+            echo "Pipeline failed!"
         }
     }
 }
