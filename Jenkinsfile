@@ -22,23 +22,25 @@ pipeline {
 				}
 	    }		
 
-        stage('Docker Build') {
-            steps {
-                script {
-                    app = docker.build("${IMAGE_NAME}:latest")
-                }
+        stage('Build') { 
+            steps { 
+               withDockerRegistry([credentialsId: "dockerlogin", url: ""]) {
+                 script{
+                 app =  docker.build("asg")
+                 }
+               }
             }
-        }
+    }
 
-        stage('Push to ECR') {
+	stage('Push') {
             steps {
-                script {
-                    docker.withRegistry("https://${ECR_REGISTRY}", 'aws-ecr-creds') {
-                        app.push('latest')
+                script{
+                    docker.withRegistry('https://422523651126.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:aws-credentials') {
+                    app.push("latest")
                     }
                 }
             }
-        }
+    	}
 		
     }
 }
