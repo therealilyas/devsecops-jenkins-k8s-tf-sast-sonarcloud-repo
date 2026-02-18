@@ -10,7 +10,7 @@ pipeline {
 		
 		stage('CompileandRunSonarAnalysis') {
             steps {	
-		sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=therealilyas -Dsonar.organization=therealilyas -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=4ab967958cb7a6f4338ae85627e912e68eb7f3af'
+		sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=therealilyas -Dsonar.organization=therealilyas -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=35955c6a61b52ea49af23385683e02138143aafe'
 			}
     	}
 
