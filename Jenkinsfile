@@ -7,39 +7,31 @@ pipeline {
 
     stages {
 
-        stage('Compile and Run Sonar Analysis') {
-            steps {
-                sh '''
-                    mvn clean verify sonar:sonar \
-                    -Dsonar.projectKey=therealilyas \
-                    -Dsonar.organization=therealilyas \
-                    -Dsonar.host.url=https://sonarcloud.io \
-                    -Dsonar.token=4ab967958cb7a6f4338ae85627e912e68eb7f3af
-                '''
-            }
-        }
-
-         stage('RunSCAAnalysisUsingSnyk') {
-			    steps {
-			        withCredentials([string(credentialsId: 'SNYK_TOKEN', variable: 'SNYK_TOKEN')]) {
-			            sh 'mvn snyk:test -fn'  // '-fn' = "fail never", already in your log
-			        }
-			    }
+		
+		stage('CompileandRunSonarAnalysis') {
+            steps {	
+		sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=therealilyas -Dsonar.organization=therealilyas -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=4ab967958cb7a6f4338ae85627e912e68eb7f3af'
 			}
+    	}
 
+		stage('RunSCAAnalysisUsingSnyk') {
+	            steps {		
+					withCredentials([string(credentialsId: 'SNYK_TOKEN', variable: 'SNYK_TOKEN')]) {
+						sh 'mvn snyk:test -fn'
+					}
+				}
+	    }
 
+		stage('Build') { 
+	            steps { 
+	               withDockerRegistry([credentialsId: "dockerlogin", url: ""]) {
+	                 script{
+	                 app =  docker.build("asg")
+	                 }
+	               }
+	            }
+	    }
 
-        stage('Build') {
-            steps {
-                withDockerRegistry(
-                    credentialsId: 'dockerlogin',
-                    url: ''
-                ) {
-                    script {
-                        app = docker.build("devsecops")
-                    }
-                }
-            }
         }
 
         stage('Push') {
