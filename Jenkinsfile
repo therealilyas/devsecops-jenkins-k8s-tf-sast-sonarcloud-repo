@@ -19,13 +19,13 @@ pipeline {
             }
         }
         
-           stage('Snyk Scan') {
-            steps {
-                withCredentials([string(credentialsId: 'snyk-token', variable: 'SNYK_TOKEN')]) {
-                    sh 'snyk test'
-                }
-            }
-        }
+         stage('RunSCAAnalysisUsingSnyk') {
+            steps {		
+				withCredentials([string(credentialsId: 'SNYK_TOKEN', variable: 'SNYK_TOKEN')]) {
+					sh 'mvn snyk:test -fn'
+				}
+			}
+        }		
 
 
         stage('Build') {
