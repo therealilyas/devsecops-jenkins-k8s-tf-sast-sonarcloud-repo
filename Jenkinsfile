@@ -19,13 +19,13 @@ pipeline {
             }
         }
         
-            stage('RunSCAAnalysisUsingSnyk') {
-                steps {		
-				    withCredentials([string(credentialsId: 'SNYK_TOKEN', variable: 'SNYK_TOKEN')]) {
-					    sh 'mvn snyk:test -fn'
-				    }
-			    }
-            }		
+           withCredentials([string(credentialsId: 'snyk-token', variable: 'SNYK_TOKEN')]) {
+			    sh '''
+			      curl -sL https://static.snyk.io/cli/latest/snyk-linux -o snyk
+			      chmod +x snyk
+			      ./snyk test
+			    '''
+			}	
 
 
         stage('Build') {
