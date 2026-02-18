@@ -84,15 +84,10 @@
 			<artifactId>jol-core</artifactId>
 			<version>0.6</version>
 		</dependency>
-		<!-- <dependency>
+		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.25</version>
-		</dependency> -->
-		<dependency>
-		    <groupId>mysql</groupId>
-		    <artifactId>mysql-connector-java</artifactId>
-		    <version>8.0.28</version> <!-- upgrade from 5.1.25 -->
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -104,7 +99,7 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.5.0</version>
 		</dependency>
-		<!-- <dependency>
+		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-all</artifactId>
 			<version>1.5.5</version>
@@ -114,24 +109,6 @@
 					<artifactId>shared-ldap</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency> -->
-		<dependency>
-		    <groupId>org.apache.derby</groupId>
-		    <artifactId>derby</artifactId>
-		    <version>10.17.1.0</version> <!-- upgrade from 10.8.3.0 -->
-		</dependency>
-		<!-- ApacheDS Core -->
-		<dependency>
-		    <groupId>org.apache.directory.server</groupId>
-		    <artifactId>apacheds-core</artifactId>
-		    <version>2.0.0-M24</version>
-		</dependency>
-		
-		<!-- ApacheDS LDAP API -->
-		<dependency>
-		    <groupId>org.apache.directory.api</groupId>
-		    <artifactId>api-all</artifactId>
-		    <version>2.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.owasp.esapi</groupId>
@@ -162,24 +139,6 @@
 				</configuration>
 			</plugin>
 			<plugin>
-			    <groupId>org.sonarsource.scanner.maven</groupId>
-			    <artifactId>sonar-maven-plugin</artifactId>
-			    <version>4.0.0.4121</version>
-			</plugin>
-			<plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-compiler-plugin</artifactId>
-			    <version>3.11.0</version>
-			    <configuration>
-			        <source>17</source> <!-- or 11 if using Java 11 -->
-			        <target>17</target>
-			        <compilerArgs>
-			            <arg>-Xlint:all</arg>
-			        </compilerArgs>
-			    </configuration>
-			</plugin>
-
-			<!-- <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
 				<version>1.1.1</version>
@@ -203,7 +162,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin> -->
+			</plugin>
 			<plugin>
    <groupId>org.owasp</groupId>
    <artifactId>dependency-check-maven</artifactId>
@@ -351,7 +310,7 @@
       <version>2.0.0</version>
       <inherited>false</inherited>
       <configuration>
-        <org>therealilyas</org>
+        <org>asecurityguru</org>
       </configuration>
     </plugin>
 <!-- Snyk Changes for SCA Ends Here -->
