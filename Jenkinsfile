@@ -18,16 +18,15 @@ pipeline {
                 '''
             }
         }
-
+        
         stage('Run SCA Analysis Using Snyk') {
             steps {
-                withCredentials([
-                    string(credentialsId: 'SNYK_TOKEN', variable: 'SNYK_TOKEN')
-                ]) {
+                withCredentials([string(credentialsId: 'SNYK_TOKEN', variable: 'SNYK_TOKEN')]) {
                     sh '''
-                        export SNYK_TOKEN=$SNYK_TOKEN
-                        snyk auth $SNYK_TOKEN
-                        mvn snyk:test -fn
+                        curl -sL https://static.snyk.io/cli/latest/snyk-linux -o snyk
+                        chmod +x snyk
+                        ./snyk auth $SNYK_TOKEN
+                        ./snyk test --maven-project
                     '''
                 }
             }
