@@ -22,7 +22,7 @@ pipeline {
          stage('RunSCAAnalysisUsingSnyk') {
 			    steps {
 			        withCredentials([string(credentialsId: 'SNYK_TOKEN', variable: 'SNYK_TOKEN')]) {
-			            sh 'mvn snyk:test -fn'  // '-fn' = "fail never", already in your log
+			            sh 'mvn snyk:test || true' 
 			        }
 			    }
 			}
