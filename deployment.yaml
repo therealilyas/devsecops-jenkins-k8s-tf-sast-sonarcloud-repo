@@ -1,32 +1,32 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: devsecops-deployment
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: devsecops
-  template:
-    metadata:
-      labels:
-        app: devsecops
-    spec:
-      containers:
-      - name: devsecops
-        image: 422523651126.dkr.ecr.us-east-1.amazonaws.com/devsecops:latest
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 8080
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: devsecops
-spec:
-  type: LoadBalancer
-  selector:
-    app: devsecops
-  ports:
-  - port: 80
-    targetPort: 8080
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: devsecops-deployment
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: devsecops
+#   template:
+#     metadata:
+#       labels:
+#         app: devsecops
+#     spec:
+#       containers:
+#       - name: devsecops
+#         image: 422523651126.dkr.ecr.us-east-1.amazonaws.com/devsecops:latest
+#         imagePullPolicy: Always
+#         ports:
+#         - containerPort: 8080
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: devsecops
+# spec:
+#   type: LoadBalancer
+#   selector:
+#     app: devsecops
+#   ports:
+#   - port: 80
+#     targetPort: 8080
