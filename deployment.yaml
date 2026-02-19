@@ -13,26 +13,20 @@ spec:
         app: devsecops
     spec:
       containers:
-      - name: asgbuggy
-        image: 422523651126.dkr.ecr.us-east-1.amazonaws.com/devsecops
+      - name: devsecops
+        image: 422523651126.dkr.ecr.us-east-1.amazonaws.com/devsecops:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
-# service type loadbalancer       
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    app: devsecops
-    k8s-app: devsecops
   name: devsecops
 spec:
-  ports:
-  - name: http
-    port: 80
-    protocol: TCP
-    targetPort: 8080
   type: LoadBalancer
   selector:
     app: devsecops
+  ports:
+  - port: 80
+    targetPort: 8080
